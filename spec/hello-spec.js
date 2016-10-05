@@ -1,7 +1,7 @@
 "use strict";
 
 import React from 'react';
-import Hello from '../../src/components/Hello.jsx';
+import Hello from '../src/hello.jsx';
 import chai from 'chai';
 import spies  from 'chai-spies';
 import {shallow} from 'enzyme';
