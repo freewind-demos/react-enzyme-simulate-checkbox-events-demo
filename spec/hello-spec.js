@@ -3,11 +3,13 @@
 import React from 'react';
 import Hello from '../src/hello.jsx';
 import chai from 'chai';
-import spies  from 'chai-spies';
+import spies from 'chai-spies';
 import {shallow} from 'enzyme';
+import chaiEnzyme from 'chai-enzyme';
 
 chai.should();
 chai.use(spies);
+chai.use(chaiEnzyme());
 
 describe('<Hello />', () => {
 
@@ -19,10 +21,10 @@ describe('<Hello />', () => {
   it('shows fruit names', () => {
     const wrapper = shallow(<Hello fruit={['AAA', 'BBB']}/>);
     // can find text in the component itself
-    wrapper.contains("Hello, I like:").should.be.true;
+    wrapper.should.contain.text("Hello, I like:");
     // but can't find it in the inner components
-    // Notice `false`
-    wrapper.contains('Box: AAA').should.be.false;
+    // Notice `should.not`
+    wrapper.should.not.contain.text('Box: AAA');
   });
 
   it('calls onFruitDelete if deletes a fruit', () => {
@@ -32,5 +34,6 @@ describe('<Hello />', () => {
     // can't interact with inner components
     // Notice `not.have`
     spy.should.not.have.been.called.with('AAA');
-  })
+  });
+
 });
