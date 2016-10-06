@@ -1,16 +1,23 @@
 import React from 'react';
-import Box from './box.jsx';
 
 class Hello extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      checked: false
+    }
+  }
+
   render() {
-    const {fruit} = this.props;
+    const {checked} = this.state;
     return <div>
-      <h1>Hello, I like:</h1>
+      <input type="checkbox" onChange={()=>this.setState({checked: !checked})}/>
       {
-        fruit.map((name, index) => <Box name={name} key={index}/>)
+        checked ? "checked" : "not checked"
       }
     </div>
   }
+
 }
 
 export default Hello;
