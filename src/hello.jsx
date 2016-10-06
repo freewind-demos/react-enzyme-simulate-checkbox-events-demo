@@ -11,13 +11,18 @@ class Hello extends React.Component {
   render() {
     const {checked} = this.state;
     return <div>
-      <input type="checkbox" onChange={()=>this.setState({checked: !checked})}/>
+      <input type="checkbox" defaultChecked={checked} onChange={this._toggle.bind(this)}/>
       {
         checked ? "checked" : "not checked"
       }
     </div>
   }
 
+  _toggle() {
+    const {onToggle} = this.props;
+    this.setState({checked: !this.state.checked});
+    onToggle();
+  }
 }
 
 export default Hello;

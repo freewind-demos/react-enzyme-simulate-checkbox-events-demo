@@ -1,39 +1,49 @@
 "use strict";
 
-import React from 'react';
-import Hello from '../src/hello.jsx';
-import chai from 'chai';
-import spies from 'chai-spies';
-import {shallow} from 'enzyme';
-import chaiEnzyme from 'chai-enzyme';
+import React from "react";
+import Hello from "../src/hello.jsx";
+import chai from "chai";
+import {mount} from "enzyme";
+import chaiEnzyme from "chai-enzyme";
+import jsdomGlobal from "jsdom-global";
+import spies  from 'chai-spies';
 
+function myAwesomeDebug(wrapper) {
+  let html = wrapper.html();
+  console.log(html);
+  return html
+}
+
+jsdomGlobal();
 chai.should();
 chai.use(spies);
-chai.use(chaiEnzyme());
+chai.use(chaiEnzyme(myAwesomeDebug));
+
 
 describe('<Hello />', () => {
 
-  it('renders to html including inner components', () => {
-    const wrapper = shallow(<Hello fruit={['AAA', 'BBB']}/>);
-    wrapper.html().should.equal("<div><h1>Hello, I like:</h1><div>Box: AAA</div><div>Box: BBB</div></div>");
+  it('renders to html', () => {
+    const wrapper = mount(<Hello />);
+    wrapper.html().should.equal('<div><input type="checkbox"><!-- react-text: 3 -->not checked<!-- /react-text --></div>');
   });
 
-  it('shows fruit names', () => {
-    const wrapper = shallow(<Hello fruit={['AAA', 'BBB']}/>);
-    // can find text in the component itself
-    wrapper.should.contain.text("Hello, I like:");
-    // but can't find it in the inner components
-    // Notice `should.not`
-    wrapper.should.not.contain.text('Box: AAA');
-  });
+  it('checks the checkbox', () => {
+    const onToggle = chai.spy();
+    const wrapper = mount(<Hello onToggle={onToggle}/>);
 
-  it('calls onFruitDelete if deletes a fruit', () => {
-    const spy = chai.spy();
-    const wrapper = shallow(<Hello fruit={['AAA', 'BBB']} onDeleteFruit={spy}/>);
-    wrapper.find('button[title="delete"]').first().simulate('click');
-    // can't interact with inner components
-    // Notice `not.have`
-    spy.should.not.have.been.called.with('AAA');
+    var checkbox = wrapper.find('input');
+    checkbox.should.not.be.checked();
+    checkbox.simulate('change', {target: {checked: true}});
+    onToggle.should.have.been.called.once();
+
+    // --------- debug information ---------
+
+    // it prints `false`, I think this is a bug
+    console.log(checkbox.get(0).checked);
+
+    // follow is failed, I think it's also a bug
+    // AssertionError: expected the node in <Hello /> to be checked <input type="checkbox" checked="checked">
+    // checkbox.should.be.checked();
   });
 
 });

@@ -1,17 +1,25 @@
-Moch Chai Enzyme Shallow Demo
-==============================
+React Enzyme Simulate Checkbox Events Demo
+==========================================
 
-Enzyme `shallow()` demo with mocha.
+How to simulate events to a checkbox, like `change`. 
 
-It's for unit-testing the component only.
+Run:
+
+```
+npm install
+npm run webpack
+npm start
+```
+
+Then open <http://localhost:8080>.
+
+Run test:
 
 ```
 npm test
 ```
 
-Notice
-------
+Bug?
+----
 
-If the component contains inner components, also `.html()` will show 
-all rendered html, but the wrapper can't find or interact with inner
- components.
+See the content of test `checks the checkbox` in `hello-spec.js`. 
